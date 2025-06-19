@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureChat | Aritra Seal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #121212;
+            --bg-card: #1a1a1a;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #ff006b;
+            --accent-tertiary: #7c3aed;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #666666;
+            --glow-primary: 0 0 20px rgba(0, 212, 255, 0.3);
+            --glow-secondary: 0 0 20px rgba(255, 0, 107, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background: linear-gradient(45deg, #0a0a0a, #1a1a2e, #16213e); }
+            50% { background: linear-gradient(45deg, #16213e, #0a0a0a, #1a1a2e); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            text-shadow: var(--glow-primary);
+            transform: translateX(-5px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-shadow: var(--glow-primary);
+        }
+
+        /* Project Header */
+        .project-header {
+            padding: 120px 2rem 4rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .project-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+        }
+
+        .project-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--text-primary);
+            border-color: transparent;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        /* START: Integrated Video Demo Section CSS */
+        .video-demo-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .demo-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .demo-title h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 320px; 
+            margin: 0 auto;
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            aspect-ratio: 9 / 16;
+        }
+
+        .video-container:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover i {
+            transform: scale(1.1);
+            color: var(--accent-secondary);
+        }
+        /* END: Integrated Video Demo Section CSS */
+
+        /* Project Banner - Screenshots */
+        .project-banner {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+        }
+
+        .screenshots-main {
+            width: 100%;
+        }
+
+        .screenshots-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .screenshots-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .screenshots-container img:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        /* Project Content */
+        .project-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+        }
+
+        .main-content {
+            color: var(--text-secondary);
+        }
+
+        .content-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .feature-list li::before {
+            content: '▶';
+            color: var(--accent-primary);
+            position: absolute;
+            left: 0;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent-primary);
+            box-shadow: var(--glow-primary);
+            transform: translateY(-5px);
+        }
+
+        .tech-item i {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .project-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tech-stack {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .screenshots-container {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                Back to Portfolio
+            </a>
+            <div class="logo">SecureChat</div>
+        </div>
+    </nav>
+
+    <section class="project-header">
+        <h1 class="project-title">SecureChat</h1>
+        <p class="project-subtitle">Chat without worrying about security</p>
+        
+        <div class="project-tags">
+            <span class="tag">#Android</span>
+            <span class="tag">#Kotlin</span>
+            <span class="tag">#Firebase</span>
+            <span class="tag">#Encryption</span>
+            <span class="tag">#XML</span>
+        </div>
+
+        <div class="project-actions">
+            <a href="https://github.com/aritra404/New_Chat" class="btn btn-primary">
+                <i class="fab fa-github"></i>
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+    <section class="video-demo-section fade-in" id="video-demo">
+        <div class="demo-title">
+            <h2>Live Demo</h2>
+        </div>
+        <div class="video-container">
+            <div class="video-placeholder" onclick="loadVideo()">
+                <i class="fas fa-play-circle"></i>
+                <p>Click to Play Demo<br>
+              </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-banner">
+        <div class="screenshots-main">
+            <div class="screenshots-container">
+                <img src="e-portrait.png" alt="1st page">
+                <img src="f-portrait.png" alt="2nd page">
+                <img src="gg-portrait.png" alt="3rd page">
+                <img src="g-portrait.png" alt="3rd page">
+                <img src="h-portrait.png" alt="4th page">
+                <img src="i-portrait.png" alt="5th page">
+            </div>
+        </div>
+    </section>
+
+    <section class="project-content">
+        <div class="main-content">
+            <div class="content-section fade-in">
+                <h2 class="section-title">Project Overview</h2>
+                <p>SecureChat is a secure, real-time Android chat application designed for seamless text based communication. Users can send text messages, share photos, and post temporary stories, fostering a rich and interactive messaging experience.</p>
+                <p>Built using Firebase for authentication, real-time database, and cloud messaging, ChatConnect ensures reliable and synchronized communication. The app leverages RSA and AES hybrid encryption for secure message transfer, safeguarding user privacy and data integrity.</p>
+            </div>
+
+            <div class="content-section fade-in">
+                <h2 class="section-title">Key Features</h2>
+                <ul class="feature-list">
+                    <li>Secure one-on-one messaging with real-time updates</li>
+                    <li>RSA + AES hybrid encryption for private message exchange</li>
+                    <li>Firebase Realtime Database for fast, synced communication</li>
+                    <li>User authentication with Firebase Authentication</li>
+                    <li>Photo sharing with cloud upload and retrieval</li>
+                    <li>Temporary story posting and viewing</li>
+                    <li>Clean and intuitive XML-based UI</li>
+                    <li>Firebase Cloud Messaging for instant notifications</li>
+                </ul>
+            </div>
+
+            <div class="content-section fade-in">
+                <h2 class="section-title">Technical Implementation</h2>
+                <p>The application is built using Kotlin and adheres to Clean Architecture principles with a well-structured MVVM (Model-View-ViewModel) design pattern, ensuring separation of concerns, testability, and scalability.</p>
+                <p>ChatConnect is built using Android (Kotlin) with an XML-based UI and follows the MVVM architecture for separation of concerns. Firebase Authentication manages user sign-in, while Firebase Realtime Database handles message syncing in real-time. Media files like photos are stored in Firebase Storage.</p>
+                <p>Messages are secured using a hybrid encryption approach—RSA for key exchange and AES for message encryption—ensuring privacy. Notifications are delivered instantly via Firebase Cloud Messaging (FCM), and the app is optimized for performance and scalability.</p>
+            </div>
+
+            <div class="content-section fade-in">
+                <h2 class="section-title">Technology Stack</h2>
+                <div class="tech-stack">
+                    <div class="tech-item"><i class="fab fa-android"></i><div>Kotlin</div></div>
+                    <div class="tech-item"><i class="fas fa-layer-group"></i><div>XML</div></div>
+                    <div class="tech-item"><i class="fas fa-fire"></i><div>Firebase authentication</div></div>
+                    <div class="tech-item"><i class="fas fa-database"></i><div>Firebase Real-time Database</div></div>
+                    <div class="tech-item"><i class="fas fa-code-branch"></i><div>Firebase cloud Storage</div></div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // JavaScript for Integrated Local Video Player
+        const videoContainer = document.querySelector('.video-container');
+        let videoPlayer; 
+
+        function loadVideo() {
+            if (!videoPlayer) {
+                videoPlayer = document.createElement('video');
+                videoPlayer.src = 'demo_chat.mp4';
+                videoPlayer.className = 'video-player';
+                videoPlayer.controls = true;
+                videoPlayer.autoplay = true; 
+                videoPlayer.muted = false;
+
+                videoContainer.innerHTML = '';
+                videoContainer.appendChild(videoPlayer);
+            }
+            videoPlayer.play();
+        }
+    </script>
+</body>
+</html>
